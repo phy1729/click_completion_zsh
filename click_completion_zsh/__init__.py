@@ -19,7 +19,7 @@ def quote(
     embed: bool = False,
     double: bool = False,
 ) -> str:
-    if match('^[A-Za-z0-9_-]*$', value):
+    if match('^[A-Za-z0-9_+-]*$', value):
         return value
 
     if double:
