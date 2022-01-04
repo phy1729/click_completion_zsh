@@ -254,15 +254,19 @@ class Zsh2Complete:
         self.prog_name = prog_name
         self.complete_var = complete_var
 
+    def make_context(self) -> Context:
+        return self.cli.make_context(self.prog_name, [], **self.ctx_args,
+                                     resilient_parsing=True)
+
     def source(self) -> str:
         """Produce the completion script."""
-        with Context(self.cli) as ctx:
+        with self.make_context() as ctx:
             info = ctx.to_info_dict()
         return complete(info)
 
     def complete(self) -> str:
         """Produce completions for a type."""
-        with Context(self.cli) as ctx:
+        with self.make_context() as ctx:
             param_type = find_param_type(environ['COMP_TYPE'], ctx, ctx.command)
             if param_type is None:
                 return ''
