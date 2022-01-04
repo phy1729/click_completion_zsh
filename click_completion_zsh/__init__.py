@@ -83,11 +83,13 @@ def complete_command(
     specs = []
     arg_count = 0
     has_variadic = False
+    prefix_chars = set()
     for param in command['params']:
         if param['param_type_name'] == 'option':
             spec = '\''
 
             all_names = [*param['opts'], *param['secondary_opts']]
+            prefix_chars |= {n[0] for n in all_names}
 
             if param['multiple'] or param['count']:
                 spec += '*'
@@ -129,8 +131,12 @@ def complete_command(
             raise ValueError(f'Unexpected param_type_name {param["param_type_name"]}')  # pragma: no cover
 
     line = '_arguments -s -S'
-    if not allow_interspersed_args:
-        line += ' -A \'-*\''
+    if not allow_interspersed_args and prefix_chars:
+        if len(prefix_chars) == 1:
+            line += f' -A \'{prefix_chars.pop()}*\''
+        else:
+            line += f' -A \'[{"".join(sorted(prefix_chars))}]*\''
+
     if 'commands' in command:
         line += ' -C'
     line += ' : \\'

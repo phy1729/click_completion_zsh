@@ -162,6 +162,21 @@ def test_option_needs_quoting() -> None:
             ''')[1:]
 
 
+def test_option_non_dash_prefix() -> None:
+    @click.command(context_settings={'allow_interspersed_args': False})
+    @click.option('+w/-w')
+    def cli() -> None:
+        """Dummy command for testing."""
+
+    assert Zsh2Complete(cli, {}, 'cli', '').source() == dedent(r'''
+            #compdef cli
+
+            _arguments -s -S -A '[+-]*' : \
+              '(+w -w)'{+w,-w}'' \
+              '--help[display usage information]'
+            ''')[1:]
+
+
 def test_command_variadic() -> None:
     @click.command()
     @click.argument('src', nargs=-1, type=click.File('r'))
