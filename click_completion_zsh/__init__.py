@@ -105,7 +105,7 @@ def complete_command(
             if len(all_names) == 1:
                 spec += quote(all_names[0], True)
             else:
-                spec += f'\'{{{",".join(quote(opt, embed=True) for opt in all_names)}}}\''
+                spec += f'\'{{{",".join(quote(opt) for opt in all_names)}}}\''
 
             help = get_help(param)
             if help is not None:

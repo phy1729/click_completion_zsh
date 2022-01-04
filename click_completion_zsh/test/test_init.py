@@ -147,6 +147,21 @@ def test_types() -> None:
                 ''')[1:]
 
 
+def test_option_needs_quoting() -> None:
+    @click.command()
+    @click.option('--terrible', '-$')
+    def cli() -> None:
+        """Dummy command for testing."""
+
+    assert Zsh2Complete(cli, {}, 'cli', '').source() == dedent(r'''
+            #compdef cli
+
+            _arguments -s -S : \
+              '(--terrible -$)'{--terrible,'-$'}':terrible:' \
+              '--help[display usage information]'
+            ''')[1:]
+
+
 def test_command_variadic() -> None:
     @click.command()
     @click.argument('src', nargs=-1, type=click.File('r'))
