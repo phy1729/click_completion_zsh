@@ -80,14 +80,6 @@ def complete_command(
 ) -> list[str]:
     lines = []
 
-    line = '_arguments -s -S'
-    if not allow_interspersed_args:
-        line += ' -A \'-*\''
-    if 'commands' in command:
-        line += ' -C'
-    line += ' : \\'
-    lines.append(line)
-
     specs = []
     arg_count = 0
     has_variadic = False
@@ -135,6 +127,14 @@ def complete_command(
 
         else:
             raise ValueError(f'Unexpected param_type_name {param["param_type_name"]}')  # pragma: no cover
+
+    line = '_arguments -s -S'
+    if not allow_interspersed_args:
+        line += ' -A \'-*\''
+    if 'commands' in command:
+        line += ' -C'
+    line += ' : \\'
+    lines.append(line)
 
     if 'commands' in command:
         subcommands = []
