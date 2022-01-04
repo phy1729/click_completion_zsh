@@ -290,11 +290,11 @@ def test_complete() -> None:
         name = 'test'
 
         def shell_complete(
-                self,
-                ctx: Context,
-                param: Parameter,
-                incomplete: str
-            ) -> list[CompletionItem]:
+            self,
+            ctx: Context,
+            param: Parameter,
+            incomplete: str
+        ) -> list[CompletionItem]:
             return [CompletionItem(x, help=f'{x} help')
                     for x in ('foo', 'bar', 'baz')
                     if x.startswith(incomplete)]
