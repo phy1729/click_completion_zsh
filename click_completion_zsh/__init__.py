@@ -90,6 +90,7 @@ def complete_command(
 
     specs = []
     arg_count = 0
+    has_variadic = False
     for param in command['params']:
         if param['param_type_name'] == 'option':
             spec = '\''
@@ -120,10 +121,13 @@ def complete_command(
             specs.append(spec)
 
         elif param['param_type_name'] == 'argument':
+            if has_variadic:
+                continue
             arg_count += 1
             spec = '\''
             if param['nargs'] == -1:
                 spec += '*'
+                has_variadic = True
             spec += complete_type(param['type'], param['name'], param['default'])
             spec += '\''
             count = 1 if param['nargs'] == -1 else param['nargs']

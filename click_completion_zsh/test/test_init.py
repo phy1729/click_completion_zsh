@@ -159,7 +159,6 @@ def test_command_variadic() -> None:
 
             _arguments -s -S : \
               '*:src:_files' \
-              ':dest:_files' \
               '--help[display usage information]'
             ''')[1:]
 
