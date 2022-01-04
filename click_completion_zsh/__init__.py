@@ -141,7 +141,7 @@ def complete_command(
         for name, subcommand in command['commands'].items():
             help = get_help(subcommand)
             if help is not None:
-                subcommands.append(f'"{quote(name, double=True, embed=True)}\\:{quote(help, double=True, embed=True)}"')
+                subcommands.append(f'{quote(name, double=True)}\\:{quote(help, double=True)}')
             else:
                 subcommands.append(quote(name, double=True))
         specs.append(f'\':subcommand:(({" ".join(subcommands)}))\'')
@@ -183,7 +183,7 @@ def complete_type(
         return f':{message}:(0 1 false true f t no yes n y off on)'
 
     if param_type == 'Choice':
-        return f':{message}:({" ".join(param["choices"])})'
+        return f':{message}:({" ".join(quote(c, double=True) for c in param["choices"])})'
 
     if param_type == 'File':
         return f':{message}:_files'

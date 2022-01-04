@@ -188,7 +188,7 @@ def test_command_subcommands() -> None:
             _arguments -s -S -A '-*' -C : \
               '*'{-v,--verbose}'[increase verbosity]' \
               '--help[display usage information]' \
-              ':subcommand:((bar "foo\:foo subcommand help"))' \
+              ':subcommand:((bar foo\:"foo subcommand help"))' \
               '*::: := ->subcmd' && return 0
 
             service=$line[1]
@@ -233,7 +233,7 @@ def test_command_subcommand_after_arg() -> None:
             _arguments -s -S -A '-*' -C : \
               ':arg:' \
               '--help[display usage information]' \
-              ':subcommand:(("bar\:bar" "foo\:foo"))' \
+              ':subcommand:((bar\:bar foo\:foo))' \
               '*::: := ->subcmd' && return 0
 
             service=$line[2]
