@@ -57,8 +57,9 @@ def get_help(
 
 
 def complete(
-    info: dict[str, Any],
+    ctx: Context,
 ) -> str:
+    info = ctx.to_info_dict()
     lines = [
         f'#compdef {info["command"]["name"]}',
         '',
@@ -267,8 +268,7 @@ class Zsh2Complete:
     def source(self) -> str:
         """Produce the completion script."""
         with self.make_context() as ctx:
-            info = ctx.to_info_dict()
-        return complete(info)
+            return complete(ctx)
 
     def complete(self) -> str:
         """Produce completions for a type."""
