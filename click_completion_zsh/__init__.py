@@ -104,6 +104,7 @@ def complete_command(
 
             help = get_help(param)
             if help is not None:
+                help = sub(r'([][])', r'\\\1', help)
                 spec += f'[{quote(help, embed=True)}]'
             if not (param['is_flag'] or param['count']):
                 argspec = complete_type(param['type'], param['name'], param['default'])

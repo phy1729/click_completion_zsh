@@ -190,6 +190,21 @@ def test_option_non_dash_prefix() -> None:
             ''')[1:]
 
 
+def test_option_bracket_in_help() -> None:
+    @click.command()
+    @click.option('--test', help='test suite [default: default]')
+    def cli() -> None:
+        """Dummy command for testing."""
+
+    assert Zsh2Complete(cli, {}, 'cli', '').source() == dedent(r'''
+            #compdef cli
+
+            _arguments -s -S : \
+              '--test[test suite \[default: default\]]:test:' \
+              '--help[display usage information]'
+            ''')[1:]
+
+
 def test_command_variadic() -> None:
     @click.command()
     @click.argument('src', nargs=-1, type=click.File('r'))
