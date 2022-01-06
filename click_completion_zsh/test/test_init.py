@@ -130,6 +130,8 @@ def test_types() -> None:
         (click.argument('rotation', type=click.FloatRange(0, 360), default=0), ': :_numbers -f -d 0 -l 0 -m 360 rotation'),
         (click.argument('hour', type=click.IntRange(0, 24, max_open=True)), ': :_numbers -l 0 -m 23 hour'),
         (click.argument('rate', type=click.IntRange(0, 100, min_open=True)), ': :_numbers -l 1 -m 100 rate'),
+        (click.argument('score', type=click.IntRange(0)), ': :_numbers -l 0 score'),
+        (click.argument('grav_potential', type=click.IntRange(max=0)), ': :_numbers -m 0 grav_potential'),
         (click.argument('file', type=click.File('r'), default='foo'), ':file [foo]:_files'),
         (click.argument('dir', type=click.Path(file_okay=False)), ':dir:_files -/'),
     ):
