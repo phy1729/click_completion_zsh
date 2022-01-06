@@ -15,6 +15,20 @@ from .. import init
 from .. import quote
 
 
+class FooType(ParamType):
+    name = 'foo'
+
+    def shell_complete(
+        self,
+        ctx: Context,
+        param: Parameter,
+        incomplete: str
+    ) -> list[CompletionItem]:
+        return [CompletionItem(x, help=f'{x} help')
+                for x in ('foo', 'bar', 'baz')
+                if x.startswith(incomplete)]
+
+
 def test_quote() -> None:
     assert quote('foo_bar') == 'foo_bar'
     assert quote('foo bar') == "'foo bar'"
@@ -314,9 +328,6 @@ def test_command_subcommand_after_arg() -> None:
 
 
 def test_find_param_type() -> None:
-    class TestType(ParamType):
-        name = 'test'
-
     @click.group()
     @click.argument('arg')
     def cli() -> None:
@@ -333,12 +344,12 @@ def test_find_param_type() -> None:
         """Bar."""
 
     @bar.command()
-    @click.argument('baz', type=TestType())
+    @click.argument('baz', type=FooType())
     def baz() -> None:
         """Baz."""
 
     with Context(cli) as ctx:
-        assert isinstance(find_param_type('test', ctx, cli), TestType)
+        assert isinstance(find_param_type(FooType.name, ctx, cli), FooType)
         assert find_param_type('text', ctx, cli) is click.STRING
         # While bool is a valid type defined by click, since it is not used by the
         # test command, it should not be found.
@@ -346,25 +357,12 @@ def test_find_param_type() -> None:
 
 
 def test_complete() -> None:
-    class TestType(ParamType):
-        name = 'test'
-
-        def shell_complete(
-            self,
-            ctx: Context,
-            param: Parameter,
-            incomplete: str
-        ) -> list[CompletionItem]:
-            return [CompletionItem(x, help=f'{x} help')
-                    for x in ('foo', 'bar', 'baz')
-                    if x.startswith(incomplete)]
-
     @click.command()
-    @click.argument('arg', type=TestType())
+    @click.argument('arg', type=FooType())
     def cli() -> None:
         """Dummy command for testing."""
 
-    environ['COMP_TYPE'] = 'test'
+    environ['COMP_TYPE'] = FooType.name
     assert Zsh2Complete(cli, {}, 'cli', '').complete() == (
         'foo\0foo help\0'
         'bar\0bar help\0'
