@@ -25,7 +25,7 @@ class FooType(ParamType):
         incomplete: str
     ) -> list[CompletionItem]:
         return [CompletionItem(x, help=f'{x} help')
-                for x in ('foo', 'bar', 'baz')
+                for x in ('foo', 'bar', 'baz:quux')
                 if x.startswith(incomplete)]
 
 
@@ -364,9 +364,9 @@ def test_complete() -> None:
 
     environ['COMP_TYPE'] = FooType.name
     assert Zsh2Complete(cli, {}, 'cli', '').complete() == (
-        'foo\0foo help\0'
-        'bar\0bar help\0'
-        'baz\0baz help'
+        'foo:foo help\0'
+        'bar:bar help\0'
+        'baz\\:quux:baz:quux help'
     )
 
     environ['COMP_TYPE'] = 'does_not_exist'

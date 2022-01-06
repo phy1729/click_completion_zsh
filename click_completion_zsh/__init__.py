@@ -278,7 +278,7 @@ class Zsh2Complete:
             if param_type is None:
                 return ''
             completions = param_type.shell_complete(ctx, None, '')
-        return '\0'.join(f'{x.value}\0{x.help if x.help is not None else ""}'
+        return '\0'.join(sub(":", r"\\:", x.value) + f':{x.help if x.help is not None else ""}'
                          for x in completions)
 
 
