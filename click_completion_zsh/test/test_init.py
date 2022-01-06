@@ -147,6 +147,19 @@ def test_types() -> None:
                 ''')[1:]
 
 
+def test_command_name() -> None:
+    @click.command()
+    def cli() -> None:
+        """Dummy command for testing."""
+
+    assert Zsh2Complete(cli, {}, 'name', '').source() == dedent(r'''
+            #compdef name
+
+            _arguments -s -S : \
+              '--help[display usage information]'
+            ''')[1:]
+
+
 def test_option_needs_quoting() -> None:
     @click.command()
     @click.option('--terrible', '-$')

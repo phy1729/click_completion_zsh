@@ -61,7 +61,7 @@ def complete(
 ) -> str:
     info = ctx.to_info_dict()
     lines = [
-        f'#compdef {info["command"]["name"]}',
+        f'#compdef {ctx.info_name}',
         '',
     ]
     if 'commands' in info['command']:
